@@ -1,0 +1,18 @@
+svg {
+  border: solid;
+  border: 2px;
+  border-color: royalblue;
+
+}
+
+
+.objeto_espacial :hover {
+
+  stroke: yellow;
+}
+
+
+
+h1 {
+  color:black;
+}
