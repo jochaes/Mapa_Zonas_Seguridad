@@ -1,14 +1,16 @@
 <?php 
     // include 'conexion.php';
 
-    
-    function returnEdificios() {
-
-        
+    function dbConnection() {
         $conn_string = "host=localhost port=5432 dbname=sem_5 user=postgres password=olakease1697";
         $conn = pg_connect($conn_string);
+        return $conn;
+    }
 
-        
+    
+    function returnEdificios() {
+        $conn = dbConnection();
+
         $result = pg_query($conn, "Select ST_XMin(bb) as xmin, 
             ST_ymax(bb)*-1 as ymax, 
             ST_Xmax(bb)-ST_Xmin(bb) as ancho, 
@@ -30,10 +32,8 @@
 
 
     function returnAceras() {
-        $resultado = "hola";
-
-        $conn_string = "host=localhost port=5432 dbname=sem_5 user=postgres password=olakease1697";
-        $conn = pg_connect($conn_string);
+        
+        $conn = dbConnection();
 
         $result = pg_query($conn, "Select ST_XMin(bb) as xmin, 
             ST_ymax(bb)*-1 as ymax, 
@@ -42,7 +42,6 @@
                 from 
             (select ST_Extent(geom) bb from  tec.edificios) as extent");
  
-
         pg_close($conn);
         return $resultado;
     }

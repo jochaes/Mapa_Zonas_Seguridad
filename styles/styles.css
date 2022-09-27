@@ -1,6 +1,8 @@
+
 body{
   background: lightgrey;
 }
+
 
 svg{
   background-image: url("https://www.fao.org/fileadmin/user_upload/gfoi/imgs/1_Remaining%20tropical%20rainforest%20patches.png");
@@ -11,3 +13,4 @@ svg{
 .objeto_espacial:hover{
   stroke: yellow;
 }
+
