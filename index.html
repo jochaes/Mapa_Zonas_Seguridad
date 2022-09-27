@@ -1,24 +1,75 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <link rel="stylesheet" href="./styles/styles.css">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <script src="./src/svg_script.js"></script>
-  <title>Mapa Zonas Seguridad</title>
+		<title>Mapa Zonas Seguridad</title>
 
-</head>
+    <!-- Icono del Tab -->
+		<link
+			rel="SHORTCUT ICON"
+			href="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/38179b6c-c5b5-4abb-89eb-b3a07dc84ac8/ddo3wyh-d89ef878-6778-4c9e-8bff-f46d506afa24.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzM4MTc5YjZjLWM1YjUtNGFiYi04OWViLWIzYTA3ZGM4NGFjOFwvZGRvM3d5aC1kODllZjg3OC02Nzc4LTRjOWUtOGJmZi1mNDZkNTA2YWZhMjQucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.INE5_elUYlKI6FdsGxEwp-nEPZExeAspxQx3I3LMZQM" />
 
-<body onload='cargar_figura()'>
+    <!-- CSS  -->
+		<link rel="stylesheet" href="./styles/styles.css" />
+
+		<!-- CSS para el Boo-->
+		<link
+			href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css"
+			rel="stylesheet"
+			integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT"
+			crossorigin="anonymous" />
+	</head>
+
+	<body onload="cargar_figura()">
+
+    <div class="container text-center">
+      <div class="row">
+        <div class="col">
+          <h1>Mapa Zonas de Seguridad Tec </h1>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-8">
+          <h2>Mapa General</h2>
+          <div id="mapa" style="text-align: center"></div>
+        </div>
+        <div class="col-4">
+          <div class="row">
+            <h2>Capas</h2>
+          </div>
+
+          <div class="row g-2">
+
+            <input type="checkbox" class="btn-check" id="btn-show-hide-edificios" checked autocomplete="off">
+            <label class="btn btn-outline-primary" for="btn-show-hide-edificios">Capa Edificios</label><br>
+
+            <input type="checkbox" class="btn-check" id="btn-show-hide-aceras" checked autocomplete="off">
+            <label class="btn btn-outline-primary" for="btn-show-hide-aceras">Capa Aceras</label><br>
+
+            <input type="checkbox" class="btn-check" id="btn-show-hide-vialidad" checked autocomplete="off">
+            <label class="btn btn-outline-primary" for="btn-show-hide-vialidad">Capa Vialidad</label><br>
+
+            <input type="checkbox" class="btn-check" id="btn-show-hide-zonas-verdes" checked autocomplete="off">
+            <label class="btn btn-outline-primary" for="btn-show-hide-zonas-verdes">Capa Zonas Verdes</label><br>
+          
+          
+          </div>
+
+        </div>
+      </div>
+    </div>
 
 
-  <div id=mapa style='text-align: center;' > 
-  </div>
-
-  
-</body>
+		
+		<script src="./src/svg_script.js"></script>
+    <script
+			src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"
+			integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8"
+			crossorigin="anonymous">
+    </script>
+	</body>
 </html>
