@@ -7,47 +7,74 @@
         return $conn;
     }
 
-    
-    function returnEdificios() {
+    function returnDimensiones(){
         $conn = dbConnection();
 
         $result = pg_query($conn, "Select ST_XMin(bb) as xmin, 
-            ST_ymax(bb)*-1 as ymax, 
-            ST_Xmax(bb)-ST_Xmin(bb) as ancho, 
-            ST_Ymax(bb)-ST_ymin(bb) as alto
-                from 
-            (select ST_Extent(geom) bb from  tec.edificios) as extent");
+        ST_ymax(bb)*-1 as ymax, 
+        ST_Xmax(bb)-ST_Xmin(bb) as ancho, 
+        ST_Ymax(bb)-ST_ymin(bb) as alto
+            from 
+        (select ST_Extent(geom) bb from  tec.zonas_verdes) as extent;");
 
         $object_result = new stdClass();
 
         $object_result -> dimensiones = pg_fetch_all($result);
 
-        $result = pg_query($conn, "select id, nombre, niveles, st_assvg(geom,1,2) as svg from tec.edificios");
+        pg_close($conn);
+        return json_encode($object_result);
+    }
 
-        $object_result -> objetos = pg_fetch_all($result);
+    
+    function returnEdificios() {
+        $conn = dbConnection();
 
+        $result = pg_query($conn, "Select ST_XMin(bb) as xmin, 
+        ST_ymax(bb)*-1 as ymax, 
+        ST_Xmax(bb)-ST_Xmin(bb) as ancho, 
+        ST_Ymax(bb)-ST_ymin(bb) as alto
+            from 
+        (select ST_Extent(geom) bb from  tec.edificios) as extent;");
+
+        $object_result = new stdClass();
+
+        $object_result -> dimensiones = pg_fetch_all($result);
+
+
+        $result_1 = pg_query($conn, "select id, nombre, niveles, st_assvg(geom,1,2) as svg from tec.edificios");
+        $object_result -> objetos = pg_fetch_all($result_1);
         pg_close($conn);
         return json_encode($object_result);
     }
 
 
-    function returnAceras() {
+    function returnZonasVerdes() {
         
         $conn = dbConnection();
 
         $result = pg_query($conn, "Select ST_XMin(bb) as xmin, 
-            ST_ymax(bb)*-1 as ymax, 
-            ST_Xmax(bb)-ST_Xmin(bb) as ancho, 
-            ST_Ymax(bb)-ST_ymin(bb) as alto
-                from 
-            (select ST_Extent(geom) bb from  tec.edificios) as extent");
- 
+        ST_ymax(bb)*-1 as ymax, 
+        ST_Xmax(bb)-ST_Xmin(bb) as ancho, 
+        ST_Ymax(bb)-ST_ymin(bb) as alto
+            from 
+        (select ST_Extent(geom) bb from  tec.zonas_verdes) as extent;");
+
+        $object_result = new stdClass();
+
+        $object_result -> dimensiones = pg_fetch_all($result);
+
+        $result_1 = pg_query($conn, "select id, nombre, tipo, st_assvg(geom,1,2) as svg from tec.zonas_verdes");
+
+        $object_result -> objetos = pg_fetch_all($result_1);
         pg_close($conn);
-        return $resultado;
+        return json_encode($object_result);
     }
     
 
     switch ($_GET['action']) {
+        case 'dimensiones':
+            echo returnDimensiones();
+            break;
         case 'edificios':
             echo returnEdificios();
             break;
@@ -58,7 +85,7 @@
             echo "vialidad";
             break;
         case 'zonasverdes':
-            echo "Zonas Verdes";
+            echo returnZonasVerdes();
             break;
     }
 

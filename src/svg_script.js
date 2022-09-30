@@ -1,18 +1,30 @@
-function cargar_figura(){
-  fetch('./db/dimensiones.php?action=edificios')
-  .then(response => response.json())
-  .then(data => verMapa('100%', '100%', data, "edificios"));
+var svgGlobal = ""
 
+function cargar_figura(){
+  fetch('./db/dimensiones.php?action=dimensiones')
+  .then(response => response.json())
+  .then(data => crearSVG('100%', '100%', data.dimensiones[0]))
 }
+
+
+function cargarCapaBD(nombreCapa){
+  fetch(`./db/dimensiones.php?action=${nombreCapa}`)
+  .then(response => response.json())
+  .then(data => cargarCapa('100%', '100%', data, nombreCapa));
+}
+
+cargarCapaBD('edificios')
+cargarCapaBD('zonasverdes')
 
 /**
  * Pinta las figuras en el SVG
  */
-function verMapa(width, height, geometrias, capa){
-
+function cargarCapa(width, height, geometrias, capa){
+  console.log("verMapa");
   console.log(geometrias);
 
-  svg = crearSVG(width, height, geometrias.dimensiones[0])
+
+  // svg = crearSVG(width, height, geometrias.dimensiones[0])
 
   ancho = parseFloat(geometrias.dimensiones[0].ancho)
   alto = parseFloat(geometrias.dimensiones[0].alto)
@@ -23,17 +35,19 @@ function verMapa(width, height, geometrias, capa){
   else
   {
       ancho_proporcional = ancho / width;
-      crear_path(svg, geometrias.objetos, ancho_proporcional, capa);
-      console.log(svg);
-
-      document.getElementById("mapa").appendChild(svg)  
   }
+
+  crear_path(svgGlobal, geometrias.objetos, ancho_proporcional, capa);
+//      document.getElementById("mapa").appendChild(svg)  
+  
 }
 
 /**
  * Función que se encarga de Pintar el SVG padre de las figuras 
  */
 function crearSVG(width,height, dimensiones){
+  console.log("crearSVG");
+
   var xmlns = "http://www.w3.org/2000/svg";
   let o_svg = document.createElementNS(xmlns, "svg");
 
@@ -43,7 +57,9 @@ function crearSVG(width,height, dimensiones){
   vb = dimensiones.xmin + ' ' +dimensiones.ymax + ' ' +dimensiones.ancho + ' ' + dimensiones.alto;
   o_svg.setAttribute('viewBox', vb);
 
-  return (o_svg)
+  svgGlobal = o_svg
+  document.getElementById("mapa").appendChild(svgGlobal)  
+  // return (o_svg)
 }
 
 /**
@@ -61,6 +77,7 @@ function crear_path(svg , geometrias , ancho_proporcional, capa){
 
   for (geom in geometrias){
       figura = document.createElementNS(xmlns, "path");
+      console.log( geometrias[geom].id);
       figura.setAttribute ("d", geometrias[geom].svg);
       figura.setAttribute("stroke", "black");
       figura.setAttribute("class", "objeto_espacial");
@@ -71,7 +88,6 @@ function crear_path(svg , geometrias , ancho_proporcional, capa){
   }
 
   svg.appendChild( g );
-
 }
 
 
@@ -86,6 +102,10 @@ function crear_grupoSVG(svg, descripcion){
 }
 
 function mostrarEdificio(id){
+  
+  
+  
+  
   alert('EDIFICIO:' + id)
 }
 
@@ -107,7 +127,7 @@ function cambiarVisibilidadCapa(btn_id){
       break
 
     case 'btn-show-hide-zonas-verdes':
-      id_capa = 'capa-zonas-verdes'
+      id_capa = 'capa-zonasverdes'
       break
   }
 
