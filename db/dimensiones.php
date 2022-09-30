@@ -69,6 +69,51 @@
         pg_close($conn);
         return json_encode($object_result);
     }
+
+
+    function returnZonasSeguridad() {
+        
+        $conn = dbConnection();
+
+        $result = pg_query($conn, "Select ST_XMin(bb) as xmin, 
+        ST_ymax(bb)*-1 as ymax, 
+        ST_Xmax(bb)-ST_Xmin(bb) as ancho, 
+        ST_Ymax(bb)-ST_ymin(bb) as alto
+            from 
+        (select ST_Extent(geom) bb from  tec.zonas_seguridad) as extent;");
+
+        $object_result = new stdClass();
+
+        $object_result -> dimensiones = pg_fetch_all($result);
+
+        $result_1 = pg_query($conn, "select id_0, capacidad, area, st_assvg(geom,1,2) as svg from tec.zonas_seguridad");
+
+        $object_result -> objetos = pg_fetch_all($result_1);
+        pg_close($conn);
+        return json_encode($object_result);
+    }
+
+    function returnRutasEvacuacion() {
+        
+        $conn = dbConnection();
+
+        $result = pg_query($conn, "Select ST_XMin(bb) as xmin, 
+        ST_ymax(bb)*-1 as ymax, 
+        ST_Xmax(bb)-ST_Xmin(bb) as ancho, 
+        ST_Ymax(bb)-ST_ymin(bb) as alto
+            from 
+        (select ST_Extent(geom) bb from  tec.rutas_evacuacion) as extent;");
+
+        $object_result = new stdClass();
+
+        $object_result -> dimensiones = pg_fetch_all($result);
+
+        $result_1 = pg_query($conn, "select id, capacidad, st_assvg(geom,1,2) as svg from tec.rutas_evacuacion");
+
+        $object_result -> objetos = pg_fetch_all($result_1);
+        pg_close($conn);
+        return json_encode($object_result);
+    }
     
 
     switch ($_GET['action']) {
@@ -86,6 +131,12 @@
             break;
         case 'zonasverdes':
             echo returnZonasVerdes();
+            break;
+        case 'zonaseguridad':
+            echo returnZonasSeguridad();
+            break;
+        case 'rutasevacuacion':
+            echo returnRutasEvacuacion();
             break;
     }
 
