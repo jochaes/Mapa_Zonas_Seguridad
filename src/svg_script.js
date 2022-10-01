@@ -169,7 +169,6 @@ function crear_path(svg , geometrias , ancho_proporcional, capa, mostrar){
  * todo:
  *  
  */
-
 var cachedViewBox = {
   x: 0,
   y: 0,
@@ -182,7 +181,9 @@ function mostrarEdificio(element){
 
   console.log(element.getBBox());
   
-  var viewBox = svgGlobal.viewBox.baseVal
+  var viewBox = svgGlobal.viewBox.baseVal 
+  console.log(viewBox);
+
   var point = svgGlobal.createSVGPoint()
 
   cachedViewBox.x = viewBox.x
@@ -219,13 +220,10 @@ function mostrarEdificio(element){
 
 
   // //Cambia la visibilidad de las capas de Zonas de seguridad y Evacuacion 
-  // cambiarVisibilidadCapa('btn-show-hide-zonas-seguridad')
-  // cambiarVisibilidadCapa('btn-show-hide-rutas-evacuacion')
+  cambiarVisibilidadCapa('btn-show-hide-zonas-seguridad')
+  cambiarVisibilidadCapa('btn-show-hide-rutas-evacuacion')
 
   // alert('EDIFICIO:' + id)
-
-
-
 
 
 }
