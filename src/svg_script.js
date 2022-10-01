@@ -1,6 +1,16 @@
 
 var svgGlobal = ""  //Variable Global que tendrá la información del SVG 
 
+var mouseX = 0
+var mouseY = 0
+
+function getPosicionCursor(event){
+  
+  mouseX = event.clientX
+  mouseY = event.clientY
+
+  console.log("Click en: " + mouseX + "," + mouseY );
+}
 
 /**
  * Llama a la base de datos para pedir las dimensiones de la capa Zonas Verdes (por ser la más amplia)
@@ -120,6 +130,7 @@ function crear_path(svg , geometrias , ancho_proporcional, capa, mostrar){
       figura.setAttribute("d", geometrias[geom].svg);
       figura.setAttribute("stroke", "black");
       figura.setAttribute("class", "objeto_espacial");
+      figura.setAttribute("id", capa+geometrias[geom].id)
 
 
       if(!mostrar){
@@ -129,7 +140,7 @@ function crear_path(svg , geometrias , ancho_proporcional, capa, mostrar){
       }
 
       figura.setAttribute("stroke-width", ancho_proporcional);
-      figura.setAttribute("onclick", "mostrarEdificio(" + geometrias[geom].id+ ")");
+      if (capa === 'edificios') figura.setAttribute("onclick", "mostrarEdificio(this)");
       g.appendChild(figura)
   }
 
@@ -158,14 +169,65 @@ function crear_path(svg , geometrias , ancho_proporcional, capa, mostrar){
  * todo:
  *  
  */
-function mostrarEdificio(id){
+
+var cachedViewBox = {
+  x: 0,
+  y: 0,
+  width: 0,
+  height:0
+}
+
+function mostrarEdificio(element){
+  const id = element.id
+
+  console.log(element.getBBox());
+  
+  var viewBox = svgGlobal.viewBox.baseVal
+  var point = svgGlobal.createSVGPoint()
+
+  cachedViewBox.x = viewBox.x
+  cachedViewBox.y = viewBox.y
+  cachedViewBox.width = viewBox.width
+  cachedViewBox.height = viewBox.height
+
+ 
+  var scaleFactor = 20
+  var scaleDelta = 1 / scaleFactor
+  
+  // point.x = element.getBBox().x
+  // point.y = element.getBBox().y
+
+  point.x = mouseX
+  point.y = mouseY
+
+  var startPoint = point.matrixTransform(svgGlobal.getScreenCTM().inverse())
+  
+  var fromVars = {
+    x:viewBox.x,
+    y:viewBox.y,
+    width:viewBox.width,
+    height:viewBox.height,
+    ease:Power2.easeOut
+  }
+
+  viewBox.x -= (startPoint.x - viewBox.x) * (scaleDelta - 1)
+  viewBox.y -= (startPoint.y - viewBox.y) * (scaleDelta - 1)
+  viewBox.width *= scaleDelta
+  viewBox.height *= scaleDelta
+  
+  TweenLite.from(viewBox, 0.5, fromVars)
 
 
-  //Cambia la visibilidad de las capas de Zonas de seguridad y Evacuacion 
-  cambiarVisibilidadCapa('btn-show-hide-zonas-seguridad'); 
-  cambiarVisibilidadCapa('btn-show-hide-rutas-evacuacion');
+  // //Cambia la visibilidad de las capas de Zonas de seguridad y Evacuacion 
+  // cambiarVisibilidadCapa('btn-show-hide-zonas-seguridad')
+  // cambiarVisibilidadCapa('btn-show-hide-rutas-evacuacion')
 
-  alert('EDIFICIO:' + id)
+  // alert('EDIFICIO:' + id)
+
+
+
+
+
 }
 
 

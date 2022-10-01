@@ -23,7 +23,7 @@
 			crossorigin="anonymous" />
 	</head>
 
-	<body onload="cargar_figura()">
+	<body onload="cargar_figura()" onmousedown="getPosicionCursor(event)">
 
     <div class="container text-center">
       <div class="row">
@@ -38,11 +38,12 @@
           <div id="mapa" style="text-align: center">
         </div>
         </div>
-        <div class="col-4">
+
+        <div class="col-4" display="none">
+
           <div class="row">
             <h2>Capas</h2>
           </div>
-
           <div class="row g-2">
 
             <input type="checkbox" class="btn-check" id="btn-show-hide-edificios" onClick="cambiarVisibilidadCapa(this.id)" checked autocomplete="off">
@@ -56,10 +57,10 @@
 
             <input type="checkbox" class="btn-check" id="btn-show-hide-zonas-verdes" onClick="cambiarVisibilidadCapa(this.id)" checked autocomplete="off">
             <label class="btn btn-outline-primary" for="btn-show-hide-zonas-verdes">Capa Zonas Verdes</label><br>
-          
           </div>
-
         </div>
+
+
       </div>
     </div>
 
@@ -71,5 +72,8 @@
 			integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8"
 			crossorigin="anonymous">
     </script>
+
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/1.18.0/TweenMax.min.js"></script>
+
 	</body>
 </html>
