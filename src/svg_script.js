@@ -1,30 +1,50 @@
-var svgGlobal = ""
 
+var svgGlobal = ""  //Variable Global que tendrá la información del SVG 
+
+
+/**
+ * Llama a la base de datos para pedir las dimensiones de la capa Zonas Verdes (por ser la más amplia)
+ *  y con esa información crea y carga el SVG a la variable local 
+ *  y luego carga las otras capas
+ */
 function cargar_figura(){
   fetch('./db/dimensiones.php?action=dimensiones')
   .then(response => response.json())
   .then(data => crearSVG('100%', '100%', data.dimensiones[0]))
+  .then(cargarCapas()) //Carga las otras capas 
 }
 
 
+/**
+ * Se encarga de Llamar al servidor para que le devuelva la capa seleccionada 
+ * @param nombreCapa El nombre de la tabla en la base de datos 
+ */
 function cargarCapaBD(nombreCapa){
   fetch(`./db/dimensiones.php?action=${nombreCapa}`)
   .then(response => response.json())
-  .then(data => cargarCapa('100%', '100%', data, nombreCapa));
+  .then(data => cargarCapa('100%', '100%', data, nombreCapa)); // Carga la Capa al SVG 
 }
 
-cargarCapaBD('edificios')
-cargarCapaBD('zonasverdes')
-cargarCapaBD('zonaseguridad')
-cargarCapaBD('rutasevacuacion')
+/**
+ * Función que se encarga de cargar todas las capas necesarias al SVG 
+ */
+function cargarCapas(){
+
+  const capas = ['edificios','aceras','zonasverdes','vialidad','zonaseguridad','rutasevacuacion']
+  capas.forEach(capa => cargarCapaBD(capa))
+}
+
 
 /**
  * Pinta las figuras en el SVG
+ * @param width       ancho del elemento SVG que se va a colocar en el SVG 
+ * @param height      alto del elemento SVG que se va a colocar en el SVG 
+ * @param geometrias  Lista de geometrias de la capa 
+ * @param capa        nombre de la capa para darle id al elemento g del SVG 
  */
 function cargarCapa(width, height, geometrias, capa){
-  console.log("verMapa");
+  console.log("Creando la capa de: " + capa);
   console.log(geometrias);
-
 
   // svg = crearSVG(width, height, geometrias.dimensiones[0])
 
@@ -45,16 +65,15 @@ function cargarCapa(width, height, geometrias, capa){
     crear_path(svgGlobal, geometrias.objetos, ancho_proporcional, capa, true);
   }
 
-  
-
-
-  
 //      document.getElementById("mapa").appendChild(svg)  
   
 }
 
 /**
  * Función que se encarga de Pintar el SVG padre de las figuras 
+ * @param width
+ * @param height
+ * @param dimensiones Dimensiones de la Capa 
  */
 function crearSVG(width,height, dimensiones){
   console.log("crearSVG");
@@ -75,7 +94,13 @@ function crearSVG(width,height, dimensiones){
 
 /**
  * Crea el Path para cada figura de la lista de geometrias
+ * @param svg                 SVG en dónde se va a pintar el elemento g que contendrá las geometrias
+ * @param geometrias          Lista de geometrias para general el path de cada una
+ * @param ancho_proporcional  
+ * @param capa                Nombre de la capa g 
+ * @param mostrar             True / False para mostrar la capa cuando se ingresa al SVG 
  */
+
 function crear_path(svg , geometrias , ancho_proporcional, capa, mostrar){
   let xmlns = "http://www.w3.org/2000/svg";
   let capaId = "capa-"+capa;
@@ -95,11 +120,14 @@ function crear_path(svg , geometrias , ancho_proporcional, capa, mostrar){
       figura.setAttribute("d", geometrias[geom].svg);
       figura.setAttribute("stroke", "black");
       figura.setAttribute("class", "objeto_espacial");
+
+
       if(!mostrar){
         figura.setAttribute("fill","rgba(255,0,0,0.5)" );  
       }else{
         figura.setAttribute("fill", colorRGB());
       }
+
       figura.setAttribute("stroke-width", ancho_proporcional);
       figura.setAttribute("onclick", "mostrarEdificio(" + geometrias[geom].id+ ")");
       g.appendChild(figura)
@@ -108,35 +136,55 @@ function crear_path(svg , geometrias , ancho_proporcional, capa, mostrar){
   svg.appendChild( g );
 }
 
+/**
+ * Crea un G para el SVG pero ya lo hacemos en crear_path 
+ */
+// function crear_grupoSVG(svg, descripcion){
+//   var xmlns = "http://www.w3.org/2000/svg";
+//   grupo = document.createElementNS(xmlns, "g");
+//   titulo = document.createElementNS(xmlns, "title");
+//   titulo.innerHTML = descripcion
+//   grupo.appendChild(titulo);
+//   grupo.appendChild(svg);
+//   return (grupo)
+// }
 
-function crear_grupoSVG(svg, descripcion){
-  var xmlns = "http://www.w3.org/2000/svg";
-  grupo = document.createElementNS(xmlns, "g");
-  titulo = document.createElementNS(xmlns, "title");
-  titulo.innerHTML = descripcion
-  grupo.appendChild(titulo);
-  grupo.appendChild(svg);
-  return (grupo)
-}
-
-
+/**
+ * Acá es donde tiene que: 
+ *  [] Hacer Zoom 
+ *  [] Mostrar la info del Edificio() y que haya un botón que se devuelva a la vista General
+ *  [] Cambiar la visibilidad de las capas de Zonas de Seguridad y Rutas de Evacuacion 
+ * 
+ * todo:
+ *  
+ */
 function mostrarEdificio(id){
 
-  cambiarVisibilidadCapa('btn-show-hide-zonas-seguridad');
+
+  //Cambia la visibilidad de las capas de Zonas de seguridad y Evacuacion 
+  cambiarVisibilidadCapa('btn-show-hide-zonas-seguridad'); 
   cambiarVisibilidadCapa('btn-show-hide-rutas-evacuacion');
+
   alert('EDIFICIO:' + id)
 }
 
 
 /**
  * Cambia la visibilidad de la capa seleccionada 
+ * Carga el elemento g del SVG según el ID 
+ * Si existe el atributo display:none es xq no se está viendo, entonces se elimina para visualizar la capa
+ * 
+ * 
+ * @param btn_id El identificador del Botón para sabaer cual se presionó 
  */
 function cambiarVisibilidadCapa(btn_id){
   let id_capa = ''
+
   switch (btn_id) {
     case 'btn-show-hide-edificios':
       id_capa = 'capa-edificios'
       break;
+
     case 'btn-show-hide-aceras':
       id_capa = 'capa-aceras'
       break;
@@ -169,10 +217,16 @@ function cambiarVisibilidadCapa(btn_id){
 
 }
 
+/**
+ * Genera un Número Aleatorio 
+ */
 function generarNumero(numero){
   return (Math.random() * numero).toFixed(0);
 }
 
+/** 
+ * Retorna el valor para el atributo color del CSS de cada path que pinta la geometria 
+ */
 function colorRGB(){
   var coolor = '(' + generarNumero(255)+ "," + generarNumero(255)+ ","+ generarNumero(255)+ ", 0.5)";
   return "rgba" + coolor;
