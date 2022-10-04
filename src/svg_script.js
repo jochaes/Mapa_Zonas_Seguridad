@@ -1,6 +1,5 @@
-
 //Variables globales
-var svgGlobal = "" 
+var svgGlobal = ""
 var mouseX = 0
 var mouseY = 0
 let pin
@@ -11,7 +10,6 @@ var cachedViewBox = {
 	width: 0,
 	height: 0,
 }
-
 
 /**
  * Llama a la base de datos para pedir las dimensiones de la capa Zonas Verdes (por ser la más amplia)
@@ -53,11 +51,10 @@ function cargarCapas() {
 function cargarCapa(width, height, geometrias, capa) {
 	// console.log("Creando la capa de: " + capa)
 	// console.log(geometrias)
-
 	// svg = crearSVG(width, height, geometrias.dimensiones[0])
 
-	ancho = parseFloat(geometrias.dimensiones[0].ancho) 
-	alto = parseFloat(geometrias.dimensiones[0].alto) 
+	ancho = parseFloat(geometrias.dimensiones[0].ancho)
+	alto = parseFloat(geometrias.dimensiones[0].alto)
 
 	if (alto > ancho) {
 		ancho_proporcional = alto / height
@@ -65,15 +62,11 @@ function cargarCapa(width, height, geometrias, capa) {
 		ancho_proporcional = ancho / width
 	}
 
-
-
 	if (capa === "zonaseguridad" || capa === "rutasevacuacion") {
 		crear_path(svgGlobal, geometrias.objetos, ancho_proporcional, capa, false)
 	} else {
 		crear_path(svgGlobal, geometrias.objetos, ancho_proporcional, capa, true)
 	}
-
-	//      document.getElementById("mapa").appendChild(svg)
 }
 
 /**
@@ -88,12 +81,12 @@ function crearSVG(width, height, dimensiones) {
 	o_svg.setAttribute("id", "svg")
 	o_svg.setAttribute("width", width)
 	o_svg.setAttribute("height", height)
-	vb = 
-    parseFloat(dimensiones.xmin) +
+	vb =
+		parseFloat(dimensiones.xmin) +
 		" " +
 		parseFloat(dimensiones.ymax) +
 		" " +
-		parseFloat(dimensiones.ancho ) +
+		parseFloat(dimensiones.ancho) +
 		" " +
 		parseFloat(dimensiones.alto)
 	o_svg.setAttribute("viewBox", vb)
@@ -146,25 +139,22 @@ function crear_path(svg, geometrias, ancho_proporcional, capa, mostrar) {
 	svg.appendChild(g)
 }
 
-
-
-
 /**
- * Crea un ZoomIn en el punto que se dió click sobre el edificio 
+ * Crea un ZoomIn en el punto que se dió click sobre el edificio
  * Sólo se activa cuando se da click sobre un edificio
  * @param element Elemento Path del Edificio
  */
 function mostrarEdificio(element) {
 	const id = element.id
 
-	//Toma el Valor del viewbox 
+	//Toma el Valor del viewbox
 	var viewBox = svgGlobal.viewBox.baseVal
 
 	//Crea Puntos en el SVG
 	var point_mouse = svgGlobal.createSVGPoint()
-  var point_center_svg = svgGlobal.createSVGPoint()
+	var point_center_svg = svgGlobal.createSVGPoint()
 
-	//Guarda la Posicieon del Viewbox para volver a el después 
+	//Guarda la Posicieon del Viewbox para volver a el después
 	cachedViewBox.x = viewBox.x
 	cachedViewBox.y = viewBox.y
 	cachedViewBox.width = viewBox.width
@@ -181,41 +171,41 @@ function mostrarEdificio(element) {
 	point_mouse.x = mouseX
 	point_mouse.y = mouseY
 
-  point_center_svg.x = viewBox.width / 2
+	point_center_svg.x = viewBox.width / 2
 	point_center_svg.y = viewBox.height / 2
 
 	//Convierte los puntos al sistema de coordenadas en cómo están ordenadas las figuras del SVG, CRM05
-	var startPoint = point_mouse.matrixTransform(svgGlobal.getScreenCTM().inverse()) 
-  var puntoCentral = point_center_svg.matrixTransform(svgGlobal.getScreenCTM().inverse()) 
+	var startPoint = point_mouse.matrixTransform(svgGlobal.getScreenCTM().inverse())
+	var puntoCentral = point_center_svg.matrixTransform(svgGlobal.getScreenCTM().inverse())
 
-  console.log("PCx"+puntoCentral.x);
-  console.log("PCy"+puntoCentral.y);
+	console.log("PCx" + puntoCentral.x)
+	console.log("PCy" + puntoCentral.y)
 
-	//El Nuevo Valor del Viewbox 
-  var fromVars = {
+	//El Nuevo Valor del Viewbox
+	var fromVars = {
 		x: viewBox.x,
 		y: viewBox.y,
 		width: viewBox.width,
 		height: viewBox.height,
-		ease: Power2.easeOut
+		ease: Power2.easeOut,
 	}
 
-  console.log("SPx:"+startPoint.x);
-  console.log("SPy:"+startPoint.y);
-  console.log("VBx:"+viewBox.x);
-  console.log("VBy:"+viewBox.y);
+	console.log("SPx:" + startPoint.x)
+	console.log("SPy:" + startPoint.y)
+	console.log("VBx:" + viewBox.x)
+	console.log("VBy:" + viewBox.y)
 
-  distanciaAlCentro_x = puntoCentral.x - startPoint.x 
-  distanciaAlCentro_y = puntoCentral.y - startPoint.y
+	distanciaAlCentro_x = puntoCentral.x - startPoint.x
+	distanciaAlCentro_y = puntoCentral.y - startPoint.y
 
-	//Se escala el Viewbox 
-  viewBox.x -= (startPoint.x - viewBox.x) * (scaleDelta - 1) - 10
-	viewBox.y -= (startPoint.y - viewBox.y ) * (scaleDelta - 1)
-  
+	//Se escala el Viewbox
+	viewBox.x -= (startPoint.x - viewBox.x) * (scaleDelta - 1) - 10
+	viewBox.y -= (startPoint.y - viewBox.y) * (scaleDelta - 1)
+
 	viewBox.width *= scaleDelta
 	viewBox.height *= scaleDelta
 
-	TweenLite.from(viewBox, 0.8, fromVars)  //Crea el Efecto de Zoom in sobre el SVG 
+	TweenLite.from(viewBox, 0.8, fromVars) //Crea el Efecto de Zoom in sobre el SVG
 
 	document.getElementById("info_edificio").innerHTML = id
 	cambiarVisibilidad("btn-show-hide-zonas-seguridad")
@@ -225,7 +215,6 @@ function mostrarEdificio(element) {
 	ocultarCapa("capa-aceras")
 	ocultarCapa("capa-vialidad")
 	ocultarCapa("capa-zonasverdes")
-	
 
 	// alert('EDIFICIO:' + id)
 }
@@ -244,12 +233,11 @@ function zoomOutSvg(viewBox) {
 }
 
 /**
- * Carga la Vista General 
+ * Carga la Vista General
  * ZoomOut del edificio
  */
 function ocultarEdificio() {
 	var viewBox = svgGlobal.viewBox.baseVal
-
 
 	cambiarVisibilidad("vistaGeneral")
 	cambiarVisibilidad("vistaDetalle")
@@ -311,13 +299,12 @@ function cambiarVisibilidad(btn_id) {
 	}
 }
 /**
- * Oculta una Capa por su ID 
+ * Oculta una Capa por su ID
  */
-function ocultarCapa(id_capa){
+function ocultarCapa(id_capa) {
 	let capa = document.getElementById(id_capa)
 	capa.classList.add("d-none")
-
-} 
+}
 
 /**
  * Genera un Número Aleatorio
@@ -334,8 +321,8 @@ function colorRGB() {
 	return "rgba" + coolor
 }
 
-/** 
- * Toma la Posicion actual del evento de click 
+/**
+ * Toma la Posicion actual del evento de click
  */
 function getPosicionCursor(event) {
 	mouseX = event.clientX
@@ -343,18 +330,13 @@ function getPosicionCursor(event) {
 	// console.log("Click en: " + mouseX + "," + mouseY)
 }
 
-
-
-
-//Localización 
-
+//Localización
 
 /**
  * Pinta el Pin en el SVG
  * @param dimensiones La posicion del punto dentro del SVG
  */
 function crearpunto(dimensiones) {
-
 	let xmlns = "http://www.w3.org/2000/svg"
 	// Elemento g dentro del SVG para cada capa
 	let g = document.createElementNS("http://www.w3.org/2000/svg", "g")
@@ -375,39 +357,38 @@ function crearpunto(dimensiones) {
 }
 
 /**
- * Si logra tomar la localizacion entonces pinta el punto en el mapa 
- * @param pos Posicion del Usuairo 
+ * Si logra tomar la localizacion entonces pinta el punto en el mapa
+ * @param pos Posicion del Usuairo
  */
 function success(pos) {
-  const crd = pos.coords;
-	console.log("Se detectó localizacion en: lat: " + crd.latitude + " long: " + crd.longitude);
+	const crd = pos.coords
+	console.log("Se detectó localizacion en: lat: " + crd.latitude + " long: " + crd.longitude)
 
 	puntos = crd.longitude + "," + crd.latitude
 	fetch(`./db/dimensiones.php?action=${puntos}`)
 		.then(response => response.json())
 		.then(data => crearpunto(data.dimensiones[0]))
-  // if (target.latitude === crd.latitude && target.longitude === crd.longitude) {
-  //   console.log('Congratulations, you reached the target');
-  //   navigator.geolocation.clearWatch(id);
-  // }
+	// if (target.latitude === crd.latitude && target.longitude === crd.longitude) {
+	//   console.log('Congratulations, you reached the target');
+	//   navigator.geolocation.clearWatch(id);
+	// }
 }
 /**
- * Error cuando el pin no logra obtener la localización 
+ * Error cuando el pin no logra obtener la localización
  * @param err Eror de la Geolocalizacion
  */
 function error(err) {
-  console.error(`ERROR LOCALIZACION (${err.code}): ${err.message}`);
+	console.error(`ERROR LOCALIZACION (${err.code}): ${err.message}`)
 }
 
 /**
  * Opciones para localizador
  */
 options = {
-  enableHighAccuracy: false,
-  timeout: 5000,
-  maximumAge: 0
-};
+	enableHighAccuracy: false,
+	timeout: 5000,
+	maximumAge: 0,
+}
 
 //Activa la Geolocalizacion
-pin = navigator.geolocation.watchPosition(success, error, options);
-
+pin = navigator.geolocation.watchPosition(success, error, options)
