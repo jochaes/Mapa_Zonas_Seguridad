@@ -1,17 +1,20 @@
 
-body{
+.body{
   background: lightgrey;
 }
 
-
-svg{
+.cMapa{
+  padding: 10%;
   background-image: url("https://www.fao.org/fileadmin/user_upload/gfoi/imgs/1_Remaining%20tropical%20rainforest%20patches.png");
   background-size: cover;
-  border: 2px solid rgba(107,107, 107,0.8);
-  cursor: crosshair;
+}
+
+#svg{
+  /* padding: 100px; */
+  border: 5px solid rgba(12, 12, 12, 0.8);
+  cursor: crosshair rgba(12, 12, 12, 0.8);
 }
 
 .objeto_espacial:hover{
   stroke: yellow;
 }
-

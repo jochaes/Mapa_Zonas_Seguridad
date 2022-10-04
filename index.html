@@ -23,7 +23,7 @@
 			crossorigin="anonymous" />
 	</head>
 
-	<body onload="cargar_figura()" onmousedown="getPosicionCursor(event)">
+	<body class="body" onload="cargar_figura()" onmousedown="getPosicionCursor(event)">
 
     <div class="container text-center">
       <div class="row">
@@ -35,30 +35,54 @@
       <div class="row">
         <div class="col-8">
           <h2>Mapa General</h2>
-          <div id="mapa" style="text-align: center">
+          <div class="cMapa">
+            <div id="mapa" style="text-align: center">
+          </div>
         </div>
         </div>
 
-        <div class="col-4" display="none">
+        <div class="col-4" id="vistaGeneral">
 
           <div class="row">
             <h2>Capas</h2>
           </div>
           <div class="row g-2">
 
-            <input type="checkbox" class="btn-check" id="btn-show-hide-edificios" onClick="cambiarVisibilidadCapa(this.id)" checked autocomplete="off">
+            <input type="checkbox" class="btn-check" id="btn-show-hide-edificios" onClick="cambiarVisibilidad(this.id)" checked autocomplete="off">
             <label class="btn btn-outline-primary" for="btn-show-hide-edificios">Capa Edificios</label><br>
 
-            <input type="checkbox" class="btn-check" id="btn-show-hide-aceras" onClick="cambiarVisibilidadCapa(this.id)" checked autocomplete="off">
+            <input type="checkbox" class="btn-check" id="btn-show-hide-aceras" onClick="cambiarVisibilidad(this.id)" checked autocomplete="off">
             <label class="btn btn-outline-primary" for="btn-show-hide-aceras">Capa Aceras</label><br>
 
-            <input type="checkbox" class="btn-check" id="btn-show-hide-vialidad" onClick="cambiarVisibilidadCapa(this.id)" checked autocomplete="off">
+            <input type="checkbox" class="btn-check" id="btn-show-hide-vialidad" onClick="cambiarVisibilidad(this.id)" checked autocomplete="off">
             <label class="btn btn-outline-primary" for="btn-show-hide-vialidad">Capa Vialidad</label><br>
 
-            <input type="checkbox" class="btn-check" id="btn-show-hide-zonas-verdes" onClick="cambiarVisibilidadCapa(this.id)" checked autocomplete="off">
+            <input type="checkbox" class="btn-check" id="btn-show-hide-zonas-verdes" onClick="cambiarVisibilidad(this.id)" checked autocomplete="off">
             <label class="btn btn-outline-primary" for="btn-show-hide-zonas-verdes">Capa Zonas Verdes</label><br>
           </div>
         </div>
+
+        <div class="col-4 d-none" id="vistaDetalle">
+
+          <div class="row">
+            <h2>Vista Detalle</h2>
+          </div>
+          <div class="row g-2 align-content-center">
+
+            <button type="button" class="btn btn-primary" onClick="ocultarEdificio()">Volver a la Vista General</button>
+
+            
+            <div class="card" style="width: 100%">
+              <img src="https://www.radiosantaclara.cr/wp-content/uploads/2022/04/Diapositiva1-750x375.jpg" class="card-img-top" alt="...">
+              <div class="card-body">
+                <p id="info_edificio" class="card-text"> </p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+
       </div>
     </div>
 
