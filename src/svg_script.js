@@ -121,14 +121,24 @@ function crear_path(svg, geometrias, ancho_proporcional, capa, mostrar) {
 	for (geom in geometrias) {
 		figura = document.createElementNS(xmlns, "path")
 		figura.setAttribute("d", geometrias[geom].svg)
-		figura.setAttribute("stroke", "black")
 		figura.setAttribute("class", "objeto_espacial")
-		figura.setAttribute("id", capa + geometrias[geom].id)
+		figura.setAttribute("id", ` ${capa}  ${geometrias[geom].id} : ${geometrias[geom].nombre} `)
 
 		if (!mostrar) {
-			figura.setAttribute("fill", "rgba(255,0,0,0.5)")
+
+			if(capa === "rutasevacuacion"){
+				figura.setAttribute("fill", "rgba(0,0,0,0)")
+				figura.setAttribute("stroke", "blue")
+			}else{
+				figura.setAttribute("fill", "rgba(0,255,0,1)")
+				figura.setAttribute("stroke", "yellow")
+			}
+
+
 		} else {
 			figura.setAttribute("fill", colorRGB())
+			figura.setAttribute("stroke", "black")
+
 		}
 
 		figura.setAttribute("stroke-width", ancho_proporcional)
