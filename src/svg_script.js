@@ -103,7 +103,6 @@ function crearSVG(width, height, dimensiones) {
  * @param capa                Nombre de la capa g
  * @param mostrar             True / False para mostrar la capa cuando se ingresa al SVG
  */
-
 function crear_path(svg, geometrias, ancho_proporcional, capa, mostrar) {
 	let xmlns = "http://www.w3.org/2000/svg"
 	let capaId = "capa-" + capa
@@ -150,12 +149,25 @@ function crear_path(svg, geometrias, ancho_proporcional, capa, mostrar) {
 	svg.appendChild(g)
 }
 
+
+
+
+
 /**
  * Crea un ZoomIn en el punto que se dió click sobre el edificio
  * Sólo se activa cuando se da click sobre un edificio
  * @param element Elemento Path del Edificio
  */
 function mostrarEdificio(element) {
+
+	tag_VistaDetalle = document.getElementById("vistaDetalle")
+
+
+	if (!tag_VistaDetalle.classList.contains("d-none")) {
+		ocultarEdificio()
+		return
+	} 
+
 	const id = element.id
 
 	//Toma el Valor del viewbox
@@ -219,6 +231,7 @@ function mostrarEdificio(element) {
 	TweenLite.from(viewBox, 0.8, fromVars) //Crea el Efecto de Zoom in sobre el SVG
 
 	document.getElementById("info_edificio").innerHTML = id
+
 	cambiarVisibilidad("btn-show-hide-zonas-seguridad")
 	cambiarVisibilidad("btn-show-hide-rutas-evacuacion")
 	cambiarVisibilidad("vistaGeneral")
@@ -226,7 +239,6 @@ function mostrarEdificio(element) {
 	ocultarCapa("capa-aceras")
 	ocultarCapa("capa-vialidad")
 	ocultarCapa("capa-zonasverdes")
-
 	// alert('EDIFICIO:' + id)
 }
 

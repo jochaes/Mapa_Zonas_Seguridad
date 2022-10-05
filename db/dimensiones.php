@@ -15,9 +15,7 @@
         // $conn_string = "host={$host} port={$port} dbname={$dbname} user={$user} password={$password}";  
         // $conn = pg_connect($conn_string); //Crea la conexion   
         // return $conn;
-
-        //Josue
-
+        
         $host= 'localhost';
         $port= '5432';
         $dbname= 'sem_5';
@@ -72,21 +70,17 @@
         return json_encode($object_result); 
     }
 
-
     /**
      * Devuelve la capa seleccionada desde la base de datos 
      * @param nombreCapa 
      * @param consulta Consulta con las diferentes columnas que desea cargar 
      */
-
-
     function returnCapa($nombreCapa, $consulta){
         $schema = 'tec'; // Esquema de la base de datos, Cambiar este datos según su instalación local
 
         $conn = dbConnection();
         $consultaCapa = "{$consulta} {$schema}.{$nombreCapa}"; //Contruccion de la consulta
         
-
         $result = pg_query($conn, "Select ST_XMin(bb) as xmin, 
         ST_ymax(bb)*-1 as ymax, 
         ST_Xmax(bb)-ST_Xmin(bb) as ancho, 
@@ -134,8 +128,6 @@
             echo returnPoint($_GET['action']);
             break;
     }
-
-
 
     /*
     while ($row = pg_fetch_row($result)) {
