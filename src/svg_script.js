@@ -126,6 +126,7 @@ function crear_path(svg, geometrias, ancho_proporcional, capa, mostrar) {
 
 		if (!mostrar) {
 
+			//Colores específicos para las rutas de evacuacion y zonas de seguridad 
 			if(capa === "rutasevacuacion"){
 				figura.setAttribute("fill", "rgba(0,0,0,0)")
 				figura.setAttribute("stroke", "blue")
