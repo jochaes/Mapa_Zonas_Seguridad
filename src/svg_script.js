@@ -162,7 +162,7 @@ function mostrarEdificio(element) {
 
 	tag_VistaDetalle = document.getElementById("vistaDetalle")
 
-
+	
 	if (!tag_VistaDetalle.classList.contains("d-none")) {
 		ocultarEdificio()
 		return
