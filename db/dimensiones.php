@@ -58,12 +58,12 @@
         $schema = 'tec'; // Esquema de la base de datos, Cambiar este datos según su instalación local
         $str_arr = explode (",", $punto); 
 
-        $corX = -84.509951;
-        $corY = 10.362561;
+        // $corX = -84.509951;
+        // $corY = 10.362561;
 
         $conn = dbConnection();
-        //$result = pg_query($conn, "update tec.coordenadas set geom = st_makepoint({$str_arr[0]},{$str_arr[1]})  where id=1;");
-        $resultado = pg_query($conn, "update tec.coordenadas set geom = st_makepoint({$corX},{$corY})  where id=1;");
+        $result = pg_query($conn, "update tec.coordenadas set geom = st_makepoint({$str_arr[0]},{$str_arr[1]})  where id=1;");
+        // $resultado = pg_query($conn, "update tec.coordenadas set geom = st_makepoint({$corX},{$corY})  where id=1;");
         $result = pg_query($conn, "Select ST_XMin(bb) as xmin, ST_ymax(bb)*-1 as ymax from (select ST_Transform(geom,5367) as bb from tec.coordenadas where id=1)as extent;");
         $object_result = new stdClass(); //Crea una clase para guardar el dato 
         $object_result -> dimensiones = pg_fetch_all($result);
